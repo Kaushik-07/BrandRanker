@@ -389,7 +389,7 @@ chmod +x scripts/deploy.sh
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **XLR8.ai** for the technical assessment opportunity
 - **OpenAI** for providing the GPT-4 API
@@ -433,7 +433,3 @@ This application demonstrates **SDE3-level capabilities** with:
 The Brand Ranker application exceeds all assessment criteria and demonstrates advanced software engineering skills suitable for senior-level positions.
 
 ---
-
-**Built with ❤️ for the XLR8.ai Full Stack Engineer Technical Assessment**
-
-*Last updated: July 2024* 
