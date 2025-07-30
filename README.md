@@ -11,11 +11,11 @@
 
 ## 🎯 Project Overview
 
-Brand Ranker is a sophisticated full-stack web application that leverages AI to rank brands across different categories. Built for the XLR8.ai Full Stack Engineer Technical Assessment, it demonstrates **SDE3-level capabilities** with advanced architecture patterns, production-ready features, and modern UI/UX design.
+Brand Ranker is a sophisticated full-stack web application that leverages AI to rank brands across different categories.
 
 ### ✨ Key Features
 
-- **🤖 AI-Powered Rankings**: Uses OpenAI GPT-4 for intelligent brand analysis
+- **🤖 AI-Powered Rankings**: Uses Perplexity Pro AI for intelligent brand analysis
 - **📊 Interactive Visualizations**: Dynamic charts and detailed insights
 - **🔐 Secure Authentication**: JWT-based user management
 - **⚡ Performance Optimized**: Caching, rate limiting, and connection pooling
@@ -23,26 +23,15 @@ Brand Ranker is a sophisticated full-stack web application that leverages AI to 
 - **🎯 Intelligent Insights**: AI-generated analysis of brand performance
 - **📈 Real-time Monitoring**: Live performance metrics and health checks
 
-## 📊 Assessment Criteria Fulfillment
 
-| Criteria | Points | Score | Status |
-|----------|--------|-------|--------|
-| User Interface | 2 | 2/2 | ✅ Excellent |
-| Functionality | 2 | 2/2 | ✅ Complete |
-| Performance | 4 | 4/4 | ✅ Outstanding |
-| Dashboard Design | 4 | 4/4 | ✅ Advanced |
-| Code Style & Organization | 3 | 3/3 | ✅ Professional |
-
-**Total Score: 15/15 (100%)**
-
-### 🎨 User Interface (2/2 points) ✅
+### 🎨 User Interface (
 - **Modern Glassmorphism Design**: Beautiful glass-like UI elements with backdrop blur
 - **Interactive Animations**: Smooth hover effects, scale transformations, and loading states
 - **Real-time Performance Monitor**: Floating dashboard with live system metrics
 - **Sophisticated Onboarding**: Multi-step tutorial with progress tracking
 - **Responsive Design**: Perfect on desktop, tablet, and mobile devices
 
-### 🔧 Functionality (2/2 points) ✅
+### 🔧 Functionality 
 - **User Authentication**: JWT-based secure authentication system
 - **Experiment Creation**: Up to 5 companies, 3 categories with validation
 - **AI Rankings**: OpenAI GPT-4 integration with intelligent fallback
@@ -50,7 +39,7 @@ Brand Ranker is a sophisticated full-stack web application that leverages AI to 
 - **Results Visualization**: Interactive charts and detailed tables
 - **Experiment History**: Complete history with comparison capabilities
 
-### ⚡ Performance (4/4 points) ✅
+### ⚡ Performance
 - **Async Processing**: Parallel LLM API calls for faster results
 - **Connection Pooling**: Optimized database and API connections
 - **Intelligent Caching**: Redis with 1-hour TTL and fallback
@@ -58,14 +47,14 @@ Brand Ranker is a sophisticated full-stack web application that leverages AI to 
 - **Error Recovery**: Graceful fallback to mock data when APIs fail
 - **Real-time Monitoring**: CPU, memory, disk usage tracking
 
-### 📊 Dashboard Design (4/4 points) ✅
+### 📊 Dashboard Design
 - **AI-Powered Analysis**: Comprehensive brand ranking with reasoning
 - **Performance Metrics**: Real-time system health and efficiency
 - **Interactive Visualizations**: Multiple chart types (bar, line, doughnut) with real data
 - **Comparative Analysis**: Side-by-side brand comparisons
 - **Organized Data Display**: Hierarchical layout with progressive disclosure
 
-### 📝 Code Style and Organization (3/3 points) ✅
+### 📝 Code Style and Organization
 - **Full TypeScript**: Complete type safety throughout frontend
 - **Python Type Hints**: Comprehensive type annotations
 - **Clean Architecture**: Separation of concerns with clear layers
@@ -95,35 +84,7 @@ Brand Ranker is a sophisticated full-stack web application that leverages AI to 
 - **Caching**: Redis container
 - **Development**: Hot reloading for both frontend and backend
 
-## 📁 Project Structure
-
-```
-BrandRanker/
-├── 📁 backend/                    # FastAPI Backend
-│   ├── 📁 app/
-│   │   ├── 📁 api/               # API endpoints & routing
-│   │   ├── 📁 core/              # Configuration & database
-│   │   ├── 📁 models/            # SQLAlchemy models
-│   │   └── 📁 services/          # Business logic
-│   ├── 📁 migrations/            # Database migrations
-│   ├── requirements.txt           # Python dependencies
-│   └── main.py                   # Application entry point
-├── 📁 frontend/                   # React Frontend
-│   ├── 📁 src/
-│   │   ├── 📁 components/        # Reusable UI components
-│   │   ├── 📁 contexts/          # React context providers
-│   │   ├── 📁 pages/             # Main application pages
-│   │   ├── 📁 services/          # API communication
-│   │   └── 📁 types/             # TypeScript definitions
-│   ├── package.json              # Node.js dependencies
-│   └── tailwind.config.js        # Styling configuration
-├── 📁 scripts/                    # Utility scripts
-├── docker-compose.yml             # Infrastructure setup
-├── .env.example                   # Environment template
-└── README.md                      # This file
-```
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -221,20 +182,20 @@ npm start
 ## 📊 Features
 
 ### Core Functionality
-- ✅ **User Authentication**: Register, login, JWT tokens
-- ✅ **Experiment Creation**: Up to 5 companies, 3 categories
-- ✅ **AI Rankings**: OpenAI-powered brand analysis
-- ✅ **Results Visualization**: Interactive charts and tables
-- ✅ **Experiment History**: View and compare past experiments
-- ✅ **Intelligent Insights**: AI-generated performance analysis
+-  **User Authentication**: Register, login, JWT tokens
+-  **Experiment Creation**: Up to 5 companies, 3 categories
+-  **AI Rankings**: OpenAI-powered brand analysis
+-  **Results Visualization**: Interactive charts and tables
+-  **Experiment History**: View and compare past experiments
+-  **Intelligent Insights**: AI-generated performance analysis
 
 ### Advanced Features
-- ✅ **Performance Monitoring**: Real-time metrics and health checks
-- ✅ **Caching System**: Redis with intelligent fallback
-- ✅ **Rate Limiting**: API protection and optimization
-- ✅ **Error Handling**: Comprehensive error management
-- ✅ **Responsive Design**: Mobile-first approach
-- ✅ **Type Safety**: TypeScript throughout frontend
+-  **Performance Monitoring**: Real-time metrics and health checks
+-  **Caching System**: Redis with intelligent fallback
+-  **Rate Limiting**: API protection and optimization
+-  **Error Handling**: Comprehensive error management
+-  **Responsive Design**: Mobile-first approach
+-  **Type Safety**: TypeScript throughout frontend
 
 ## 🎨 User Interface
 
@@ -297,8 +258,6 @@ npm start
 - **Environment Variables**: Secure configuration management
 - **Error Handling**: No sensitive data exposure
 
-## 🚀 SDE3-Level Enhancements
-
 ### Advanced Architecture Patterns
 - **Service Layer Pattern**: Clean separation of business logic
 - **Repository Pattern**: Data access abstraction
@@ -344,25 +303,6 @@ curl -X POST http://localhost:8000/api/auth/login \
   -d '{"username":"test","password":"test"}'
 ```
 
-## 🚀 Deployment
-
-### Production Deployment
-```bash
-# Run production deployment script
-chmod +x scripts/deploy.sh
-./scripts/deploy.sh
-```
-
-### Backend Deployment
-- **Heroku**: Ready with Procfile
-- **Railway**: Compatible with PostgreSQL
-- **AWS/GCP**: Docker-ready deployment
-
-### Frontend Deployment
-- **Vercel**: Optimized for React
-- **Netlify**: Static site hosting
-- **AWS S3**: Static website hosting
-
 ## 📚 Documentation
 
 ### Architecture
@@ -392,7 +332,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ##  Acknowledgments
 
 - **XLR8.ai** for the technical assessment opportunity
-- **OpenAI** for providing the GPT-4 API
+- **PerplexityAPI** for providing the Perplexity Pro API
 - **FastAPI** and **React** communities for excellent documentation
 - **Tailwind CSS** for the beautiful design system
 
@@ -400,7 +340,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🎯 Key Differentiators
 
-### SDE3-Level Features
 1. **Advanced Performance Monitoring**: Real-time system metrics with health checks
 2. **Sophisticated Caching Strategy**: Multi-level caching with intelligent fallback
 3. **Production-Ready Architecture**: Scalable, maintainable, and secure design
@@ -418,18 +357,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **API Design**: RESTful endpoints with comprehensive documentation
 - **Testing Strategy**: Unit and integration test structure
 - **Documentation**: Comprehensive setup and usage guides
-
-## 🚀 Ready for Production
-
-This application demonstrates **SDE3-level capabilities** with:
-- **Production-Ready Architecture**: Scalable and maintainable design
-- **Advanced Monitoring**: Real-time performance and health tracking
-- **Security Hardening**: Comprehensive security measures
-- **DevOps Integration**: Automated deployment and monitoring
-- **User Experience Excellence**: Modern, accessible, and responsive design
-- **Performance Optimization**: Multi-level optimization strategies
-- **Code Quality**: Professional-grade code with comprehensive documentation
-
-The Brand Ranker application exceeds all assessment criteria and demonstrates advanced software engineering skills suitable for senior-level positions.
-
 ---
