@@ -1,0 +1,37 @@
+from pydantic_settings import BaseSettings
+from typing import Optional
+import os
+
+
+class Settings(BaseSettings):
+    # Database
+    DATABASE_URL: str = "sqlite:///./brandranker.db"
+    
+    # Security
+    SECRET_KEY: str = "your-secret-key-change-this-in-production"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours (24 * 60 minutes)
+    
+    # OpenAI
+    OPENAI_API_KEY: Optional[str] = None
+    
+    # Perplexity (Priority 1)
+    PERPLEXITY_API_KEY: Optional[str] = None
+    
+    # CORS
+    BACKEND_CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:8000"]
+    
+    # Redis (for caching and rate limiting)
+    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
+    
+    # Debug mode
+    DEBUG: bool = False
+    
+    class Config:
+        env_file = ".env"
+
+
+settings = Settings() 
