@@ -131,6 +131,15 @@ const Dashboard: React.FC = () => {
   const handleAnalysisStart = () => {
     setIsAnalyzing(true);
     setAnalysisProgress(0);
+    
+    // Add a timeout to prevent the analysis overlay from getting stuck
+    setTimeout(() => {
+      if (isAnalyzing) {
+        console.log('⚠️ Analysis timeout - resetting state');
+        setIsAnalyzing(false);
+        setAnalysisProgress(0);
+      }
+    }, 30000); // 30 second timeout
   };
 
   const handleAnalysisProgress = (progress: number) => {
@@ -307,6 +316,20 @@ const Dashboard: React.FC = () => {
                     <p className="text-xs text-purple-600">Detail ranking analysis</p>
                   </div>
                 </div>
+              </div>
+              
+              {/* Manual Reset Button */}
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => {
+                    setIsAnalyzing(false);
+                    setAnalysisProgress(0);
+                  }}
+                  className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                >
+                  🔄 Reset Analysis
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Click if analysis seems stuck</p>
               </div>
             </div>
           </div>

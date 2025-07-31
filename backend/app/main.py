@@ -98,7 +98,7 @@ async def handle_errors(request: Request, call_next):
         )
 
 # Helper function to get user from token
-async def get_user_from_token(request: Request, db: Session = Depends(get_db)):
+def get_user_from_token(request: Request, db: Session = Depends(get_db)):
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")

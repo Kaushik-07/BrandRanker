@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './BrandRankerDashboard.css';
+import { AverageRanksChart } from './AverageRanksChart';
 
 interface DashboardProps {
   experiment: any;
@@ -584,6 +585,9 @@ export const BrandRankerDashboard: React.FC<DashboardProps> = ({ experiment }) =
               <div className="enhanced-stat-label">Analysis Date</div>
             </div>
           </div>
+
+          {/* Average Ranks Chart */}
+          <AverageRanksChart experiment={experiment} />
 
           {/* Enhanced Rankings Table */}
           <div className="enhanced-card">

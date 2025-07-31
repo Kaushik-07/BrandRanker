@@ -23,12 +23,34 @@ class ValidationResponse(BaseModel):
     invalid_items: List[str] = []
     error: str = ""
 
+class PerformanceStatsResponse(BaseModel):
+    cache_hits: int
+    cache_misses: int
+    api_calls: int
+    total_requests: int
+    cache_hit_rate: float
+    cached_companies: int
+    cached_categories: int
+
+@router.get("/validation/performance", response_model=PerformanceStatsResponse)
+async def get_validation_performance():
+    """Get validation service performance statistics"""
+    try:
+        stats = validation_service.get_performance_stats()
+        return PerformanceStatsResponse(**stats)
+    except Exception as e:
+        logger.error(f"Performance stats error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to get performance statistics"
+        )
+
 @router.post("/validate/companies", response_model=ValidationResponse)
 async def validate_companies(
     request: ValidationRequest,
     db: Session = Depends(get_db)
 ):
-    """Validate companies using AI"""
+    """Validate companies using AI with intelligent caching"""
     try:
         if not request.companies:
             raise HTTPException(
@@ -67,7 +89,7 @@ async def validate_categories(
     request: ValidationRequest,
     db: Session = Depends(get_db)
 ):
-    """Validate categories using AI"""
+    """Validate categories using AI with intelligent caching"""
     try:
         if not request.categories:
             raise HTTPException(

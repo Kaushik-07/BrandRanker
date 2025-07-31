@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { User, AuthContextType } from '../types';
 import { authAPI } from '../services/api';
 
@@ -20,7 +20,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true); // Start with loading true
-  const [isInitialized, setIsInitialized] = useState(false); // Track if we've checked localStorage
 
   // Function to validate token by checking if it exists and has valid format
   const validateToken = (token: string): boolean => {
@@ -126,7 +125,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(null);
       }
       
-      setIsInitialized(true);
       setIsLoading(false);
       console.log('✅ Authentication initialization complete');
       console.log('🔍 Final user state:', user);
@@ -211,26 +209,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   // Function to handle token expiration
-  const handleTokenExpiration = () => {
+  const handleTokenExpiration = useCallback(() => {
     console.log('🔄 Token expired, logging out user');
     logout();
-  };
+  }, []);
 
-  // Function to check if token is about to expire (within 1 hour)
-  const isTokenExpiringSoon = (token: string): boolean => {
-    try {
-      const parts = token.split('.');
-      if (parts.length !== 3) return false;
-      
-      const payload = JSON.parse(atob(parts[1]));
-      const currentTime = Math.floor(Date.now() / 1000);
-      const oneHour = 60 * 60; // 1 hour in seconds
-      
-      return payload.exp && (payload.exp - currentTime) < oneHour;
-    } catch (error) {
-      return false;
-    }
-  };
+
 
   // Check token expiration periodically
   useEffect(() => {
@@ -247,7 +231,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const interval = setInterval(checkTokenExpiration, 10 * 60 * 1000);
     
     return () => clearInterval(interval);
-  }, [token]);
+  }, [token, handleTokenExpiration]);
 
   const value: AuthContextType = {
     user,

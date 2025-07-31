@@ -22,9 +22,11 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
   
-  // Validation states
+  // Enhanced validation states
   const [isValidatingCompany, setIsValidatingCompany] = useState(false);
   const [isValidatingCategory, setIsValidatingCategory] = useState(false);
+  const [companyValidationStatus, setCompanyValidationStatus] = useState<'idle' | 'validating' | 'valid' | 'invalid'>('idle');
+  const [categoryValidationStatus, setCategoryValidationStatus] = useState<'idle' | 'validating' | 'valid' | 'invalid'>('idle');
 
   // Memoized validation rules
   const validationRules = useMemo(() => ({
@@ -88,7 +90,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
     }
   };
 
-  // Add company handler with API validation
+  // Add company handler with enhanced validation feedback
   const addCompany = useCallback(async () => {
     if (!companyInput.trim()) return;
     
@@ -105,6 +107,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
 
     // Show validation in progress
     setIsValidatingCompany(true);
+    setCompanyValidationStatus('validating');
     setError(null);
 
     try {
@@ -115,16 +118,22 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
         setCompanies([...companies, companyInput.trim()]);
         setCompanyInput('');
         setError(null);
+        setCompanyValidationStatus('valid');
         setValidationErrors(prev => {
           const newErrors = { ...prev };
           delete newErrors.company;
           return newErrors;
         });
+        
+        // Reset validation status after a brief success animation
+        setTimeout(() => setCompanyValidationStatus('idle'), 2000);
       } else {
         setError('Invalid company name. Please enter a real brand name.');
+        setCompanyValidationStatus('invalid');
       }
     } catch (error) {
       setError('Failed to validate company. Please try again.');
+      setCompanyValidationStatus('invalid');
     } finally {
       setIsValidatingCompany(false);
     }
@@ -135,7 +144,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
     setCompanies(companies.filter((_, i) => i !== index));
   }, [companies]);
 
-  // Add category handler with API validation
+  // Add category handler with enhanced validation feedback
   const addCategory = useCallback(async () => {
     if (!categoryInput.trim()) return;
     
@@ -152,6 +161,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
 
     // Show validation in progress
     setIsValidatingCategory(true);
+    setCategoryValidationStatus('validating');
     setError(null);
 
     try {
@@ -162,16 +172,22 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
         setCategories([...categories, categoryInput.trim()]);
         setCategoryInput('');
         setError(null);
+        setCategoryValidationStatus('valid');
         setValidationErrors(prev => {
           const newErrors = { ...prev };
           delete newErrors.category;
           return newErrors;
         });
+        
+        // Reset validation status after a brief success animation
+        setTimeout(() => setCategoryValidationStatus('idle'), 2000);
       } else {
         setError('Invalid category name. Please enter a real category.');
+        setCategoryValidationStatus('invalid');
       }
     } catch (error) {
       setError('Failed to validate category. Please try again.');
+      setCategoryValidationStatus('invalid');
     } finally {
       setIsValidatingCategory(false);
     }
@@ -182,16 +198,22 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
     setCategories(categories.filter((_, i) => i !== index));
   }, [categories]);
 
-  // Handle input changes
+  // Handle input changes with enhanced feedback
   const handleCompanyInputChange = useCallback((value: string) => {
     setCompanyInput(value);
     if (error) setError(null);
-  }, [error]);
+    if (companyValidationStatus !== 'idle') {
+      setCompanyValidationStatus('idle');
+    }
+  }, [error, companyValidationStatus]);
 
   const handleCategoryInputChange = useCallback((value: string) => {
     setCategoryInput(value);
     if (error) setError(null);
-  }, [error]);
+    if (categoryValidationStatus !== 'idle') {
+      setCategoryValidationStatus('idle');
+    }
+  }, [error, categoryValidationStatus]);
 
   // Memoized form validation
   const isFormValid = useMemo(() => {
@@ -231,6 +253,8 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
         setCompanyInput('');
         setCategoryInput('');
         setValidationErrors({});
+        setCompanyValidationStatus('idle');
+        setCategoryValidationStatus('idle');
         
         // Complete analysis
         onAnalysisComplete?.();
@@ -238,6 +262,8 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
       }
     } catch (err: any) {
       setError(err.message || 'Failed to create experiment');
+      // Ensure analysis state is reset even on error
+      onAnalysisComplete?.();
     } finally {
       setIsLoading(false);
     }
@@ -252,23 +278,45 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
         <div className="form-section">
           <label>Companies (up to {validationRules.maxCompanies})</label>
           <div className="input-group">
-            <div className="input-with-button">
-              <input
-                type="text"
-                value={companyInput}
-                onChange={(e) => handleCompanyInputChange(e.target.value)}
-                placeholder="Enter company name"
-                className={validationErrors.company ? 'error' : ''}
-                disabled={isLoading || isValidatingCompany}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCompany())}
-              />
+            <div className={`input-with-button ${companyValidationStatus}`}>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  value={companyInput}
+                  onChange={(e) => handleCompanyInputChange(e.target.value)}
+                  placeholder="Enter company name"
+                  className={validationErrors.company ? 'error' : ''}
+                  disabled={isLoading || isValidatingCompany}
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCompany())}
+                />
+                {companyValidationStatus === 'validating' && (
+                  <div className="validation-spinner">
+                    <div className="spinner-dot"></div>
+                    <div className="spinner-dot"></div>
+                    <div className="spinner-dot"></div>
+                  </div>
+                )}
+                {companyValidationStatus === 'valid' && (
+                  <div className="validation-success">✓</div>
+                )}
+                {companyValidationStatus === 'invalid' && (
+                  <div className="validation-error">✗</div>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={addCompany}
                 disabled={!companyInput.trim() || isLoading || companies.length >= validationRules.maxCompanies || isValidatingCompany}
-                className="add-button"
+                className={`add-button ${isValidatingCompany ? 'validating' : ''}`}
               >
-                {isValidatingCompany ? 'Validating...' : 'Add'}
+                {isValidatingCompany ? (
+                  <span className="button-content">
+                    <div className="button-spinner"></div>
+                    <span>Validating...</span>
+                  </span>
+                ) : (
+                  'Add'
+                )}
               </button>
             </div>
             {validationErrors.company && (
@@ -280,7 +328,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
           {companies.length > 0 && (
             <div className="tags-container">
               {companies.map((company, index) => (
-                <div key={index} className="tag">
+                <div key={index} className="tag company-tag">
                   <span>{company}</span>
                   <button
                     type="button"
@@ -300,23 +348,45 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
         <div className="form-section">
           <label>Categories (up to {validationRules.maxCategories})</label>
           <div className="input-group">
-            <div className="input-with-button">
-              <input
-                type="text"
-                value={categoryInput}
-                onChange={(e) => handleCategoryInputChange(e.target.value)}
-                placeholder="Enter category name"
-                className={validationErrors.category ? 'error' : ''}
-                disabled={isLoading || isValidatingCategory}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCategory())}
-              />
+            <div className={`input-with-button ${categoryValidationStatus}`}>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  value={categoryInput}
+                  onChange={(e) => handleCategoryInputChange(e.target.value)}
+                  placeholder="Enter category name"
+                  className={validationErrors.category ? 'error' : ''}
+                  disabled={isLoading || isValidatingCategory}
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCategory())}
+                />
+                {categoryValidationStatus === 'validating' && (
+                  <div className="validation-spinner">
+                    <div className="spinner-dot"></div>
+                    <div className="spinner-dot"></div>
+                    <div className="spinner-dot"></div>
+                  </div>
+                )}
+                {categoryValidationStatus === 'valid' && (
+                  <div className="validation-success">✓</div>
+                )}
+                {categoryValidationStatus === 'invalid' && (
+                  <div className="validation-error">✗</div>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={addCategory}
                 disabled={!categoryInput.trim() || isLoading || categories.length >= validationRules.maxCategories || isValidatingCategory}
-                className="add-button"
+                className={`add-button ${isValidatingCategory ? 'validating' : ''}`}
               >
-                {isValidatingCategory ? 'Validating...' : 'Add'}
+                {isValidatingCategory ? (
+                  <span className="button-content">
+                    <div className="button-spinner"></div>
+                    <span>Validating...</span>
+                  </span>
+                ) : (
+                  'Add'
+                )}
               </button>
             </div>
             {validationErrors.category && (
@@ -328,7 +398,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
           {categories.length > 0 && (
             <div className="tags-container">
               {categories.map((category, index) => (
-                <div key={index} className="tag">
+                <div key={index} className="tag category-tag">
                   <span>{category}</span>
                   <button
                     type="button"
@@ -345,7 +415,10 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
         </div>
 
         {error && (
-          <div className="error-message">{error}</div>
+          <div className="error-message global-error">
+            <div className="error-icon">⚠</div>
+            <span>{error}</span>
+          </div>
         )}
 
         <button
@@ -353,7 +426,14 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
           disabled={!isFormValid || isLoading || isValidatingCompany || isValidatingCategory}
           className={`submit-button ${isLoading ? 'loading' : ''}`}
         >
-          {isLoading ? 'Creating...' : 'Create Experiment'}
+          {isLoading ? (
+            <span className="button-content">
+              <div className="button-spinner"></div>
+              <span>Creating Experiment...</span>
+            </span>
+          ) : (
+            'Create Experiment'
+          )}
         </button>
       </form>
     </div>
