@@ -2,12 +2,17 @@ services:
   - type: web
     name: brand-ranker-backend
     env: python
+    pythonVersion: "3.11"
     buildCommand: pip install -r backend/requirements.txt
     startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: SECRET_KEY
-        value: your-secret-key-change-in-production
+        value: your-super-secret-key-change-this-in-production
       - key: ALGORITHM
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
-        value: 30 
+        value: 30
+      - key: DATABASE_URL
+        value: sqlite:///./brand_ranker.db
+      - key: API_V1_STR
+        value: /api 
