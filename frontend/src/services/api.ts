@@ -1,7 +1,11 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { User, Token, ExperimentResult, ExperimentCreate, ExperimentResponse } from '../types';
 
+// Use localhost for development, show error for production
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
+console.log('🔍 API Base URL:', API_BASE_URL);
+console.log('🔍 Environment:', process.env.NODE_ENV);
 
 // Simple in-memory cache (currently disabled to prevent infinite loops)
 const cache = new Map<string, { data: any; timestamp: number }>();
@@ -69,8 +73,18 @@ api.interceptors.response.use(
   },
   async (error: AxiosError) => {
     console.log('❌ API Response error:', error.response?.status, error.config?.url);
+    console.log('❌ Error message:', error.message);
+    console.log('❌ Error code:', error.code);
     
     const originalRequest = error.config as any;
+    
+    // Handle network errors (backend not reachable)
+    if (error.code === 'ERR_NETWORK' || error.message.includes('Network Error')) {
+      console.log('🌐 Network Error: Backend server is not reachable');
+      console.log('🔍 This usually means the backend is not running or not deployed');
+      
+      // Don't show alert here - let the component handle it
+    }
     
     // Handle 401 errors - clear invalid tokens
     if (error.response?.status === 401) {
@@ -82,14 +96,26 @@ api.interceptors.response.use(
       localStorage.removeItem('user');
       console.log('🧹 Cleared invalid token from localStorage');
       
-      // Don't redirect automatically - let the AuthContext handle this
-      // The AuthContext will detect the missing token and update the state
+      // Don't show alert here - let the component handle it
     }
     
     // Handle 403 errors
     if (error.response?.status === 403) {
       console.log('🚫 403 Forbidden - Token might be invalid');
       console.log('🔍 Current token in localStorage:', localStorage.getItem('token'));
+      // Don't show alert here - let the component handle it
+    }
+    
+    // Handle 404 errors
+    if (error.response?.status === 404) {
+      console.log('🚫 404 Not Found - API endpoint not found');
+      // Don't show alert here - let the component handle it
+    }
+    
+    // Handle 500+ server errors
+    if (error.response?.status && error.response.status >= 500) {
+      console.log('🚫 Server Error:', error.response.status);
+      // Don't show alert here - let the component handle it
     }
     
     // Retry logic for server errors

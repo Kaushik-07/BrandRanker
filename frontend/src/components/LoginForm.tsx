@@ -189,14 +189,36 @@ const LoginForm: React.FC = () => {
       console.log('🔍 Error response:', error.response);
       console.log('🔍 Error detail:', error.response?.data?.detail);
       
-      // Display the exact backend error message without alert
-      if (error.response?.data?.detail) {
-        console.log('🔍 Setting error to:', error.response.data.detail);
-        setError(error.response.data.detail);
-      } else {
-        console.log('🔍 Setting generic error');
-        setError('An error occurred. Please try again.');
+      let errorMessage = 'An error occurred. Please try again.';
+      
+      // Handle network errors (backend not reachable)
+      if (error.code === 'ERR_NETWORK' || error.message.includes('Network Error')) {
+        errorMessage = '❌ Cannot connect to server. Please check your internet connection or try again later.';
       }
+      // Handle specific backend errors
+      else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      }
+      // Handle server errors
+      else if (error.response?.status >= 500) {
+        errorMessage = '❌ Server error. Please try again later.';
+      }
+      
+      // Show single alert with the error message
+      alert(`❌ Authentication Error: ${errorMessage}`);
+      
+      // Clear form and redirect to login page
+      setFormData({
+        email: '',
+        username: '',
+        password: '',
+        confirmPassword: ''
+      });
+      setError('');
+      setSuccess('');
+      
+      // Navigate to login page without refresh
+      navigate('/', { replace: true });
     } finally {
       setIsLoading(false);
     }
