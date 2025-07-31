@@ -243,10 +243,12 @@ Rules:
 Categories to validate: {', '.join(categories)}
 
 Rules:
-- Only include real product categories that companies can be ranked in
-- Valid examples: Smartphones, Laptops, Sneakers, T-Shirts, Coffee, Cars, Jeans, Shirts
+- Accept broad product categories that companies can be ranked in
+- Valid examples: Smartphones, Laptops, Sneakers, Running Shoes, Basketball, Football, T-Shirts, Coffee, Cars, Jeans, Shirts
+- Accept sports categories like "Basketball", "Football", "Tennis" as they represent product categories
+- Accept footwear categories like "Running Shoes", "Basketball Shoes", "Casual Shoes"
 - Exclude single letters, random characters, or obvious fake categories like "abc", "def", "adffg", "gggggg"
-- Categories should be specific enough for meaningful brand comparison
+- Be lenient with category names - if it makes sense as a product category, accept it
 - If a category is unclear or fake, mark it as invalid
 - Respond with ONLY the JSON, no other text"""
 
