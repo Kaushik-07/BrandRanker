@@ -226,7 +226,9 @@ Rules:
             
         except Exception as e:
             logger.error(f"Batch company validation error: {e}")
-            return False, [], companies, "Unable to validate companies. Please try again."
+            error_msg = f"Validation failed: {str(e)}"
+            logger.error(error_msg)
+            return False, [], companies, error_msg
 
     async def _validate_categories_batch(self, categories: List[str]) -> Tuple[bool, List[str], List[str], str]:
         """Validate a batch of categories using AI for efficiency"""
@@ -276,11 +278,17 @@ Rules:
             
         except Exception as e:
             logger.error(f"Batch category validation error: {e}")
-            return False, [], categories, "Unable to validate categories. Please try again."
+            error_msg = f"Validation failed: {str(e)}"
+            logger.error(error_msg)
+            return False, [], categories, error_msg
 
     async def _make_perplexity_request(self, prompt: str, system_content: str) -> Dict[str, Any]:
         """Make request to Perplexity API with optimized timeout"""
         logger.info(f"Making Perplexity API request with key: {'SET' if self.perplexity_api_key else 'NOT SET'}")
+        
+        if not self.perplexity_api_key:
+            logger.error("Perplexity API key is not set!")
+            raise Exception("Perplexity API key is not configured")
         
         async with httpx.AsyncClient() as client:
             try:
@@ -301,7 +309,11 @@ Rules:
                     timeout=8.0  # Reduced timeout for faster response
                 )
                 logger.info(f"Perplexity API response status: {response.status_code}")
-                response.raise_for_status()
+                
+                if response.status_code != 200:
+                    logger.error(f"Perplexity API error: {response.status_code} - {response.text}")
+                    raise Exception(f"API returned status {response.status_code}: {response.text}")
+                
                 result = response.json()["choices"][0]["message"]
                 logger.info(f"Perplexity API response content: {result}")
                 return result
