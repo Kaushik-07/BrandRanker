@@ -1,8 +1,10 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { User, Token, ExperimentResult, ExperimentCreate, ExperimentResponse } from '../types';
 
-// Use localhost for development, show error for production
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+// Use production backend URL for deployed app, localhost for development
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://brand-ranker-backend.onrender.com'
+  : (process.env.REACT_APP_API_URL || 'http://localhost:8000');
 
 console.log('🔍 API Base URL:', API_BASE_URL);
 console.log('🔍 Environment:', process.env.NODE_ENV);

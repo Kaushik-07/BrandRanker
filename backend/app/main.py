@@ -17,12 +17,33 @@ load_dotenv()  # Load environment variables
 
 app = FastAPI()
 
-# CORS Setup
+# CORS Setup - Properly configured for production
+origins = [
+    "http://localhost:3000",                    # React dev server
+    "http://localhost:3001",                    # Alternative dev port
+    "https://brand-ranker-app.web.app",        # Deployed frontend
+    "https://brand-ranker-app.firebaseapp.com", # Firebase alternative URL
+    "https://brand-ranker-backend.onrender.com", # Backend URL (for testing)
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=origins,
+    allow_credentials=True,              # Allow cookies/auth headers
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=[
+        "Accept",
+        "Accept-Language",
+        "Content-Language",
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+    ],
+    expose_headers=["*"],
+    max_age=86400,  # Cache preflight requests for 24 hours
 )
 
 # Include the auth router
