@@ -17,20 +17,21 @@ load_dotenv()  # Load environment variables
 
 app = FastAPI()
 
-# CORS Setup - Properly configured for production
+# CORS Setup - Comprehensive configuration for all APIs
 origins = [
     "http://localhost:3000",                    # React dev server
     "http://localhost:3001",                    # Alternative dev port
     "https://brand-ranker-app.web.app",        # Deployed frontend
     "https://brand-ranker-app.firebaseapp.com", # Firebase alternative URL
     "https://brand-ranker-backend.onrender.com", # Backend URL (for testing)
+    "*",  # Allow all origins for development/testing
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,              # Allow cookies/auth headers
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allow_headers=[
         "Accept",
         "Accept-Language",
@@ -41,8 +42,24 @@ app.add_middleware(
         "Origin",
         "Access-Control-Request-Method",
         "Access-Control-Request-Headers",
+        "Cache-Control",
+        "Pragma",
+        "Expires",
+        "X-CSRF-Token",
+        "X-API-Key",
     ],
-    expose_headers=["*"],
+    expose_headers=[
+        "Content-Type",
+        "Content-Length",
+        "Content-Range",
+        "Content-Disposition",
+        "Authorization",
+        "X-Total-Count",
+        "X-Page-Count",
+        "X-Current-Page",
+        "X-Per-Page",
+        "X-Total-Pages",
+    ],
     max_age=86400,  # Cache preflight requests for 24 hours
 )
 
@@ -128,6 +145,22 @@ async def handle_errors(request: Request, call_next):
             status_code=500,
             content={"error": f"Internal error: {str(e)}"}
         )
+
+# CORS preflight handler for all endpoints
+@app.options("/{full_path:path}")
+async def options_handler(request: Request):
+    """Handle CORS preflight requests for all endpoints"""
+    return JSONResponse(
+        status_code=200,
+        content={"message": "CORS preflight successful"},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
+            "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Max-Age": "86400",
+        }
+    )
 
 # Helper function to get user from token
 def get_user_from_token(request: Request, db: Session = Depends(get_db)):
