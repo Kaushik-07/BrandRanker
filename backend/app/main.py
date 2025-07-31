@@ -21,12 +21,9 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",                    # React dev server
     "http://localhost:3001",                    # Alternative dev port
-    "http://localhost:3002",                    # Additional dev port
     "https://brand-ranker-app.web.app",        # Deployed frontend
     "https://brand-ranker-app.firebaseapp.com", # Firebase alternative URL
     "https://brand-ranker-backend.onrender.com", # Backend URL (for testing)
-    "https://localhost:3000",                   # HTTPS localhost
-    "https://localhost:3001",                   # HTTPS localhost alternative
     "*",  # Allow all origins for development/testing
 ]
 
@@ -50,8 +47,6 @@ app.add_middleware(
         "Expires",
         "X-CSRF-Token",
         "X-API-Key",
-        "User-Agent",
-        "Referer",
     ],
     expose_headers=[
         "Content-Type",
