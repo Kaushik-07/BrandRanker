@@ -8,12 +8,14 @@ if settings.DATABASE_URL.startswith("sqlite"):
     engine = create_engine(
         settings.DATABASE_URL,
         connect_args={"check_same_thread": False},
-        pool_pre_ping=True
+        pool_pre_ping=True,
+        poolclass=None,  # Disable connection pooling for SQLite
+        echo=False
     )
 else:
     engine = create_engine(settings.DATABASE_URL)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)
 
 Base = declarative_base()
 
