@@ -330,6 +330,15 @@ async def rank_brands(request: RankingRequest):
 async def health_check():
     return {"status": "healthy"}
 
+@app.post("/init-db")
+async def init_database():
+    """Initialize database tables manually"""
+    try:
+        Base.metadata.create_all(bind=engine)
+        return {"message": "Database initialized successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database initialization failed: {str(e)}")
+
 @app.get("/test-auth")
 async def test_auth(current_user: DBUser = Depends(get_user_from_token)):
     return {"message": f"Authentication working for user: {current_user.username}"} 
