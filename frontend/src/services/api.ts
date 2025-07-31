@@ -2,12 +2,26 @@ import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'ax
 import { User, Token, ExperimentResult, ExperimentCreate, ExperimentResponse } from '../types';
 
 // Use production backend URL for deployed app, localhost for development
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://brand-ranker-backend.onrender.com'
-  : (process.env.REACT_APP_API_URL || 'http://localhost:8000');
+const API_BASE_URL = (() => {
+  // If we're on the production domain, always use production backend
+  if (window.location.hostname === 'brand-ranker-app.web.app' || 
+      window.location.hostname === 'brand-ranker-app.firebaseapp.com') {
+    return 'https://brand-ranker-backend.onrender.com';
+  }
+  
+  // For development, use localhost
+  if (process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost') {
+    return process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  }
+  
+  // Default to production backend for any other case
+  return 'https://brand-ranker-backend.onrender.com';
+})();
 
 console.log('🔍 API Base URL:', API_BASE_URL);
 console.log('🔍 Environment:', process.env.NODE_ENV);
+console.log('🔍 Current hostname:', window.location.hostname);
+console.log('🔍 Current URL:', window.location.href);
 
 // Simple in-memory cache (currently disabled to prevent infinite loops)
 const cache = new Map<string, { data: any; timestamp: number }>();
