@@ -84,6 +84,17 @@ class ExperimentResponse(BaseModel):
 
 # Import Experiment model
 from app.models.experiment import Experiment
+from app.models import Base
+from app.core.database import engine
+
+# Initialize database tables on startup
+@app.on_event("startup")
+async def startup_event():
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables initialized successfully!")
+    except Exception as e:
+        print(f"❌ Database initialization error: {e}")
 
 @app.middleware("http")
 async def handle_errors(request: Request, call_next):
