@@ -1,99 +1,157 @@
-# Brand Ranker - Full Stack Web Application
+# BrandRanker - AI-Powered Brand Analysis Platform
 
-> **AI-powered brand ranking across categories with intelligent insights**
+A sophisticated full-stack web application that leverages AI to rank brands across different categories with intelligent insights and interactive visualizations.
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
-[![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)](https://fastapi.tiangolo.com)
-[![TypeScript](https://img.shields.io/badge/TypeScript-4.9+-blue.svg)](https://typescriptlang.org)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue.svg)](https://postgresql.org)
-[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-orange.svg)](https://openai.com)
+## Table of Contents
 
-## 🎯 Project Overview
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Architecture](#architecture)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [API Documentation](#api-documentation)
+- [Usage Guide](#usage-guide)
+- [Development](#development)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 
-Brand Ranker is a sophisticated full-stack web application that leverages AI to rank brands across different categories.
+## Overview
 
-### ✨ Key Features
+BrandRanker is a modern web application that uses AI to analyze and rank brands across various categories. The platform provides intelligent insights, interactive visualizations, and comprehensive brand comparison tools.
 
-- **🤖 AI-Powered Rankings**: Uses Perplexity Pro AI for intelligent brand analysis
-- **📊 Interactive Visualizations**: Dynamic charts and detailed insights
-- **🔐 Secure Authentication**: JWT-based user management
-- **⚡ Performance Optimized**: Caching, rate limiting, and connection pooling
-- **📱 Responsive Design**: Works seamlessly on all devices
-- **🎯 Intelligent Insights**: AI-generated analysis of brand performance
-- **📈 Real-time Monitoring**: Live performance metrics and health checks
+### Key Capabilities
 
+- **AI-Powered Rankings**: Uses Perplexity Pro AI for intelligent brand analysis
+- **Multi-Category Analysis**: Compare brands across up to 3 categories simultaneously
+- **Interactive Visualizations**: Dynamic charts and detailed insights
+- **User Authentication**: Secure JWT-based user management
+- **Experiment History**: Track and compare past analyses
+- **Real-time Performance Monitoring**: System health and efficiency metrics
 
-### 🎨 User Interface (
-- **Modern Glassmorphism Design**: Beautiful glass-like UI elements with backdrop blur
-- **Interactive Animations**: Smooth hover effects, scale transformations, and loading states
-- **Real-time Performance Monitor**: Floating dashboard with live system metrics
-- **Sophisticated Onboarding**: Multi-step tutorial with progress tracking
-- **Responsive Design**: Perfect on desktop, tablet, and mobile devices
+## Features
 
-### 🔧 Functionality 
-- **User Authentication**: JWT-based secure authentication system
-- **Experiment Creation**: Up to 5 companies, 3 categories with validation
-- **AI Rankings**: OpenAI GPT-4 integration with intelligent fallback
-- **Parallel Processing**: Async category analysis for performance
-- **Results Visualization**: Interactive charts and detailed tables
-- **Experiment History**: Complete history with comparison capabilities
+### Core Functionality
 
-### ⚡ Performance
-- **Async Processing**: Parallel LLM API calls for faster results
-- **Connection Pooling**: Optimized database and API connections
-- **Intelligent Caching**: Redis with 1-hour TTL and fallback
-- **Rate Limiting**: 50 requests per minute with intelligent throttling
-- **Error Recovery**: Graceful fallback to mock data when APIs fail
-- **Real-time Monitoring**: CPU, memory, disk usage tracking
+- **User Authentication & Authorization**
+  - JWT-based secure authentication
+  - User registration and login
+  - Password hashing with bcrypt
+  - Session management
 
-### 📊 Dashboard Design
-- **AI-Powered Analysis**: Comprehensive brand ranking with reasoning
-- **Performance Metrics**: Real-time system health and efficiency
-- **Interactive Visualizations**: Multiple chart types (bar, line, doughnut) with real data
-- **Comparative Analysis**: Side-by-side brand comparisons
-- **Organized Data Display**: Hierarchical layout with progressive disclosure
+- **Experiment Creation**
+  - Add up to 5 companies for comparison
+  - Select up to 3 categories for analysis
+  - Real-time validation of inputs
+  - AI-powered ranking generation
 
-### 📝 Code Style and Organization
-- **Full TypeScript**: Complete type safety throughout frontend
-- **Python Type Hints**: Comprehensive type annotations
-- **Clean Architecture**: Separation of concerns with clear layers
-- **SOLID Principles**: Well-structured, maintainable code
-- **Comprehensive Documentation**: Detailed setup and usage guides
+- **AI Analysis**
+  - Perplexity Pro AI integration
+  - Intelligent brand ranking across categories
+  - Detailed reasoning for each ranking
+  - Fallback mechanisms for API failures
 
-## 🏗️ Tech Stack
+- **Data Visualization**
+  - Interactive bar charts for rankings
+  - Performance comparison tables
+  - Brand insights and analysis
+  - Historical experiment tracking
+
+### Advanced Features
+
+- **Performance Optimization**
+  - Async processing for faster results
+  - Redis caching with intelligent fallback
+  - Connection pooling for databases
+  - Rate limiting and throttling
+
+- **Real-time Monitoring**
+  - System performance metrics
+  - Health checks and status monitoring
+  - Error tracking and recovery
+  - Resource usage analytics
+
+- **Responsive Design**
+  - Mobile-first approach
+  - Modern glassmorphism UI
+  - Interactive animations
+  - Cross-browser compatibility
+
+## Technology Stack
 
 ### Backend
-- **Framework**: FastAPI (Python)
+- **Framework**: FastAPI (Python 3.8+)
 - **Database**: PostgreSQL with SQLAlchemy ORM
-- **Authentication**: JWT with bcrypt password hashing
-- **LLM Integration**: OpenAI GPT-4
-- **Caching**: Redis with intelligent fallback
-- **Performance**: Real-time metrics, rate limiting, health checks
+- **Authentication**: JWT with bcrypt
+- **AI Integration**: Perplexity Pro API
+- **Caching**: Redis
+- **Testing**: pytest
 
 ### Frontend
 - **Framework**: React 18 with TypeScript
-- **Styling**: Tailwind CSS with modern design
+- **Styling**: Tailwind CSS
 - **Charts**: Chart.js with React-Chartjs-2
 - **State Management**: React Context API
 - **Routing**: React Router DOM
+- **HTTP Client**: Axios
 
 ### Infrastructure
 - **Containerization**: Docker & Docker Compose
-- **Database**: PostgreSQL container
-- **Caching**: Redis container
-- **Development**: Hot reloading for both frontend and backend
+- **Database**: PostgreSQL 15
+- **Caching**: Redis 7
+- **Development**: Hot reloading
 
-## Quick Start
+## Architecture
 
-### Prerequisites
+### Backend Architecture
 
-- **Python 3.8+**
-- **Node.js 16+**
-- **Docker & Docker Compose**
-- **OpenAI API Key**
+```
+backend/
+├── app/
+│   ├── api/           # API endpoints and routes
+│   ├── core/          # Configuration and database setup
+│   ├── models/        # Database models
+│   ├── services/      # Business logic and external services
+│   └── utils/         # Utility functions
+├── migrations/         # Database migrations
+├── tests/             # Test files
+└── main.py           # Application entry point
+```
 
-### 1. Clone Repository
+### Frontend Architecture
+
+```
+frontend/src/
+├── components/        # Reusable UI components
+├── contexts/          # React contexts (Auth, etc.)
+├── pages/            # Page components
+├── services/         # API service functions
+├── types/            # TypeScript type definitions
+└── App.tsx          # Main application component
+```
+
+## Prerequisites
+
+Before running this application, ensure you have the following installed:
+
+- **Python 3.8 or higher**
+- **Node.js 16 or higher**
+- **Docker and Docker Compose**
+- **Git**
+
+### System Requirements
+
+- **RAM**: Minimum 4GB (8GB recommended)
+- **Storage**: At least 2GB free space
+- **Network**: Internet connection for API calls
+
+## Installation
+
+### 1. Clone the Repository
 
 ```bash
 git clone <repository-url>
@@ -102,197 +160,295 @@ cd BrandRanker
 
 ### 2. Environment Setup
 
-```bash
-# Copy environment template
-cp .env.example backend/.env
+Create environment files for the backend:
 
-# Edit with your settings
+```bash
+# Create backend environment file
+cp backend/.env.example backend/.env
+```
+
+Edit the environment file with your configuration:
+
+```bash
 nano backend/.env
 ```
 
-**Required Environment Variables:**
-```env
-DATABASE_URL=postgresql://user:password@localhost:5432/brandranker
-SECRET_KEY=your-secret-key-change-this-in-production
-OPENAI_API_KEY=your_openai_api_key_here
-REDIS_URL=redis://localhost:6379
-```
+### 3. Start Infrastructure Services
 
-### 3. Start Application
-
-#### Option A: Automated Setup (Recommended)
 ```bash
-# Make script executable
-chmod +x scripts/start.sh
-
-# Start everything
-./scripts/start.sh
-```
-
-#### Option B: Manual Setup
-
-**Start Infrastructure:**
-```bash
-# Start database and cache
+# Start PostgreSQL and Redis using Docker
 docker-compose up -d db redis
 ```
 
-**Setup Backend:**
+### 4. Backend Setup
+
 ```bash
+# Navigate to backend directory
+cd backend
+
 # Create virtual environment
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
 
 # Install dependencies
-cd backend
 pip install -r requirements.txt
 
-# Start backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Run database migrations
+alembic upgrade head
+
+# Initialize database (if needed)
+python init_db.py
 ```
 
-**Setup Frontend:**
+### 5. Frontend Setup
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+```
+
+## Configuration
+
+### Environment Variables
+
+Create a `.env` file in the `backend` directory with the following variables:
+
+```env
+# Database Configuration
+DATABASE_URL=postgresql://user:password@localhost:5432/brandranker
+
+# Security
+SECRET_KEY=your-secret-key-change-this-in-production
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# AI Service
+PERPLEXITY_API_KEY=your_perplexity_api_key_here
+
+# Redis Configuration
+REDIS_URL=redis://localhost:6379
+
+# Application Settings
+ENVIRONMENT=development
+DEBUG=True
+```
+
+### Required API Keys
+
+1. **Perplexity API Key**: Get from [Perplexity AI](https://www.perplexity.ai/)
+2. **Database**: PostgreSQL instance (local or cloud)
+3. **Redis**: For caching (optional but recommended)
+
+## Running the Application
+
+### Option 1: Automated Setup (Recommended)
+
+Create a startup script:
+
+```bash
+# Create startup script
+cat > start-app.sh << 'EOF'
+#!/bin/bash
+
+echo "🚀 Starting BrandRanker Application..."
+
+# Start infrastructure
+echo "📦 Starting infrastructure services..."
+docker-compose up -d db redis
+
+# Wait for services to be ready
+echo "⏳ Waiting for services to be ready..."
+sleep 10
+
+# Start backend
+echo "🐍 Starting backend server..."
+cd backend
+source venv/bin/activate
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 &
+BACKEND_PID=$!
+
+# Start frontend
+echo "⚛️ Starting frontend server..."
+cd ../frontend
+npm start &
+FRONTEND_PID=$!
+
+echo "✅ Application started successfully!"
+echo "🌐 Frontend: http://localhost:3000"
+echo "🔧 Backend: http://localhost:8000"
+echo "📚 API Docs: http://localhost:8000/docs"
+
+# Wait for user to stop
+echo "Press Ctrl+C to stop all services"
+trap "kill $BACKEND_PID $FRONTEND_PID; docker-compose down; exit" INT
+wait
+EOF
+
+chmod +x start-app.sh
+./start-app.sh
+```
+
+### Option 2: Manual Setup
+
+#### Start Backend
+
+```bash
+cd backend
+source venv/bin/activate
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+#### Start Frontend
+
 ```bash
 cd frontend
-npm install
 npm start
 ```
 
-### 4. Access Application
+### Option 3: Docker Setup
 
-- **🌐 Frontend**: http://localhost:3000
-- **🔧 Backend**: http://localhost:8000
-- **📚 API Documentation**: http://localhost:8000/docs
-- **📊 Health Check**: http://localhost:8000/health
+```bash
+# Build and start all services
+docker-compose up --build
+```
 
-## 🎯 Core Functionality
+## API Documentation
 
-### Experiment Creation
-1. **Add Companies**: Enter up to 5 companies to compare
-2. **Select Categories**: Choose up to 3 categories for analysis
-3. **AI Analysis**: OpenAI GPT-4 analyzes each brand across categories
-4. **View Results**: Interactive charts and detailed rankings
+### Authentication Endpoints
 
-### Example Use Case
-**Companies**: Nike, Adidas, Puma
-**Categories**: Running shoes, Basketball shoes
-
-**Result**: AI generates rankings for each category and calculates average performance across all categories.
-
-## 📊 Features
-
-### Core Functionality
--  **User Authentication**: Register, login, JWT tokens
--  **Experiment Creation**: Up to 5 companies, 3 categories
--  **AI Rankings**: OpenAI-powered brand analysis
--  **Results Visualization**: Interactive charts and tables
--  **Experiment History**: View and compare past experiments
--  **Intelligent Insights**: AI-generated performance analysis
-
-### Advanced Features
--  **Performance Monitoring**: Real-time metrics and health checks
--  **Caching System**: Redis with intelligent fallback
--  **Rate Limiting**: API protection and optimization
--  **Error Handling**: Comprehensive error management
--  **Responsive Design**: Mobile-first approach
--  **Type Safety**: TypeScript throughout frontend
-
-## 🎨 User Interface
-
-### Modern Design
-- **Glassmorphism Effects**: Modern glass-like UI elements
-- **Gradient Backgrounds**: Beautiful color transitions
-- **Interactive Elements**: Hover effects and animations
-- **Responsive Layout**: Perfect on desktop, tablet, and mobile
-
-### Data Visualization
-- **Bar Charts**: Clear brand ranking comparisons
-- **Line Charts**: Performance trends over time
-- **Doughnut Charts**: Performance distribution analysis
-- **Color-Coded Results**: Gold, silver, bronze for top performers
-- **Detailed Tables**: Complete breakdown with reasons
-- **Insights Panel**: AI-powered analysis and recommendations
-
-## 🔧 API Endpoints
-
-### Authentication
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 
-### Experiments
+### Experiment Endpoints
+
 - `POST /api/experiments/` - Create new experiment
 - `GET /api/experiments/` - Get user's experiments
 - `GET /api/experiments/{id}` - Get specific experiment
 
-### Monitoring
-- `GET /api/performance/stats` - System performance metrics
-- `GET /api/performance/health` - System health status
-- `GET /api/performance/metrics` - Detailed performance metrics
+### Validation Endpoints
 
-## 📈 Performance Optimizations
+- `POST /api/validate/companies` - Validate company names
+- `POST /api/validate/categories` - Validate category names
 
-### Backend Optimizations
-- **Async Processing**: Parallel LLM API calls
-- **Connection Pooling**: Optimized database connections
-- **Intelligent Caching**: Redis with 1-hour TTL
-- **Rate Limiting**: 50 requests per minute window
-- **Error Recovery**: Graceful fallback to mock data
+### Health Endpoints
 
-### Frontend Optimizations
-- **React Memoization**: Optimized re-renders
-- **Lazy Loading**: Efficient component loading
-- **Bundle Optimization**: Reduced bundle size
-- **State Management**: Efficient context usage
+- `GET /health` - System health check
+- `GET /api/performance/stats` - Performance metrics
 
-## 🛡️ Security Features
+### Interactive API Documentation
 
-### Authentication & Authorization
-- **JWT Tokens**: Secure token-based authentication
-- **Password Hashing**: bcrypt with salt
-- **Token Expiration**: Configurable session timeouts
-- **CORS Protection**: Cross-origin request handling
+Once the backend is running, visit:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
-### Data Protection
-- **Input Validation**: Comprehensive request validation
-- **SQL Injection Prevention**: ORM-based queries
-- **Environment Variables**: Secure configuration management
-- **Error Handling**: No sensitive data exposure
+## Usage Guide
 
-### Advanced Architecture Patterns
-- **Service Layer Pattern**: Clean separation of business logic
-- **Repository Pattern**: Data access abstraction
-- **Observer Pattern**: Event-driven architecture
-- **Strategy Pattern**: Pluggable algorithms
+### 1. Getting Started
 
-### Production-Ready Features
-- **Real-time Monitoring**: System performance tracking
-- **Health Checks**: Comprehensive health status
-- **Error Recovery**: Graceful degradation
-- **Scalability Design**: Horizontal scaling capabilities
-- **Security Hardening**: Production-grade security
+1. **Access the Application**: Open http://localhost:3000
+2. **Register/Login**: Create an account or log in
+3. **Navigate to Dashboard**: You'll be redirected to the main dashboard
 
-### DevOps Integration
-- **Docker Containerization**: Consistent environments
-- **Systemd Services**: Production service management
-- **Nginx Configuration**: Reverse proxy setup
-- **Automated Deployment**: Scripted deployment process
-- **Health Monitoring**: Automated health checks
+### 2. Creating an Experiment
 
-## 🧪 Testing
+1. **Add Companies**: Enter up to 5 company names
+2. **Select Categories**: Choose up to 3 categories for analysis
+3. **Submit**: Click "Create Experiment" to start AI analysis
+4. **View Results**: Interactive charts and detailed rankings
+
+### 3. Understanding Results
+
+- **Rankings**: 1 = Best, higher numbers = lower ranking
+- **Average Ranks**: Overall performance across all categories
+- **Insights**: AI-generated analysis and reasoning
+- **Charts**: Visual representation of rankings
+
+### 4. Experiment History
+
+- **View Past Experiments**: Access from dashboard
+- **Compare Results**: Side-by-side analysis
+- **Export Data**: Download results for further analysis
+
+## Development
+
+### Project Structure
+
+```
+BrandRanker/
+├── backend/           # FastAPI backend
+│   ├── app/          # Application code
+│   ├── migrations/   # Database migrations
+│   ├── tests/        # Test files
+│   └── requirements.txt
+├── frontend/         # React frontend
+│   ├── src/          # Source code
+│   ├── public/       # Static files
+│   └── package.json
+├── docker-compose.yml # Infrastructure setup
+└── README.md
+```
+
+### Development Workflow
+
+1. **Backend Development**
+   ```bash
+   cd backend
+   source venv/bin/activate
+   # Make changes to code
+   uvicorn app.main:app --reload
+   ```
+
+2. **Frontend Development**
+   ```bash
+   cd frontend
+   npm start
+   # Make changes to code
+   # Hot reload will automatically apply changes
+   ```
+
+3. **Database Changes**
+   ```bash
+   cd backend
+   # Create new migration
+   alembic revision --autogenerate -m "Description"
+   # Apply migration
+   alembic upgrade head
+   ```
+
+### Code Style
+
+- **Python**: Follow PEP 8 guidelines
+- **TypeScript**: Use strict mode and proper typing
+- **React**: Use functional components with hooks
+- **Testing**: Maintain good test coverage
+
+## Testing
 
 ### Backend Testing
+
 ```bash
 cd backend
-python -m pytest tests/
+source venv/bin/activate
+pytest tests/ -v
 ```
 
 ### Frontend Testing
+
 ```bash
 cd frontend
 npm test
 ```
 
 ### API Testing
+
 ```bash
 # Test health endpoint
 curl http://localhost:8000/health
@@ -303,58 +459,173 @@ curl -X POST http://localhost:8000/api/auth/login \
   -d '{"username":"test","password":"test"}'
 ```
 
-## 📚 Documentation
+### Integration Testing
 
-### Architecture
-- **Clean Architecture**: Separation of concerns
-- **SOLID Principles**: Well-structured, maintainable code
-- **Design Patterns**: Appropriate pattern usage
-- **Microservices Ready**: Service decomposition
+```bash
+# Run all tests
+cd backend && pytest tests/ -v
+cd ../frontend && npm test -- --watchAll=false
+```
 
-### Code Quality
-- **Type Safety**: Full TypeScript implementation
-- **Error Handling**: Comprehensive error management
-- **Testing Strategy**: Unit and integration test structure
-- **Code Documentation**: Comprehensive inline documentation
+## Deployment
 
-## 🤝 Contributing
+### Production Deployment
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Environment Setup**
+   ```bash
+   # Set production environment
+   export ENVIRONMENT=production
+   export DEBUG=False
+   ```
 
-## 📄 License
+2. **Database Migration**
+   ```bash
+   cd backend
+   alembic upgrade head
+   ```
+
+3. **Build Frontend**
+   ```bash
+   cd frontend
+   npm run build
+   ```
+
+4. **Start Services**
+   ```bash
+   # Backend
+   cd backend
+   gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
+
+   # Frontend (serve static files)
+   npx serve -s build -l 3000
+   ```
+
+### Docker Deployment
+
+```bash
+# Build and run with Docker
+docker-compose -f docker-compose.prod.yml up --build
+```
+
+### Cloud Deployment
+
+The application is configured for deployment on:
+- **Render**: Backend deployment
+- **Firebase**: Frontend hosting
+- **Vercel**: Alternative frontend hosting
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Database Connection Error**
+   ```bash
+   # Check if PostgreSQL is running
+   docker-compose ps
+   # Restart database
+   docker-compose restart db
+   ```
+
+2. **Redis Connection Error**
+   ```bash
+   # Check Redis status
+   docker-compose logs redis
+   # Restart Redis
+   docker-compose restart redis
+   ```
+
+3. **API Key Issues**
+   - Verify Perplexity API key is correct
+   - Check environment variables are loaded
+   - Ensure API key has proper permissions
+
+4. **Frontend Build Errors**
+   ```bash
+   # Clear node modules and reinstall
+   cd frontend
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+5. **Backend Import Errors**
+   ```bash
+   # Reinstall dependencies
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+### Performance Issues
+
+1. **Slow API Responses**
+   - Check Redis cache status
+   - Monitor database connection pool
+   - Review API rate limits
+
+2. **Memory Issues**
+   - Monitor system resources
+   - Check for memory leaks
+   - Optimize database queries
+
+### Debug Mode
+
+Enable debug mode for detailed error messages:
+
+```bash
+export DEBUG=True
+export ENVIRONMENT=development
+```
+
+## Contributing
+
+### Development Setup
+
+1. **Fork the Repository**
+2. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Make Changes**
+4. **Run Tests**
+   ```bash
+   cd backend && pytest tests/
+   cd ../frontend && npm test
+   ```
+5. **Commit Changes**
+   ```bash
+   git commit -m "Add your feature description"
+   ```
+6. **Push to Branch**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+7. **Create Pull Request**
+
+### Code Standards
+
+- Follow existing code style
+- Add tests for new features
+- Update documentation
+- Ensure all tests pass
+- Review security implications
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-##  Acknowledgments
+## Support
 
-- **XLR8.ai** for the technical assessment opportunity
-- **PerplexityAPI** for providing the Perplexity Pro API
-- **FastAPI** and **React** communities for excellent documentation
+For support and questions:
+- Create an issue in the repository
+- Check the troubleshooting section
+- Review the API documentation
+
+## Acknowledgments
+
+- **Perplexity AI** for providing the AI analysis capabilities
+- **FastAPI** community for excellent documentation
+- **React** team for the powerful frontend framework
 - **Tailwind CSS** for the beautiful design system
 
 ---
 
-## 🎯 Key Differentiators
-
-1. **Advanced Performance Monitoring**: Real-time system metrics with health checks
-2. **Sophisticated Caching Strategy**: Multi-level caching with intelligent fallback
-3. **Production-Ready Architecture**: Scalable, maintainable, and secure design
-4. **Comprehensive Error Handling**: Graceful degradation and recovery
-5. **Advanced UI/UX**: Modern design with sophisticated interactions
-6. **DevOps Integration**: Automated deployment and monitoring
-7. **Security Hardening**: Production-grade security measures
-8. **Scalability Design**: Horizontal scaling capabilities
-
-### Technical Excellence
-- **Full TypeScript Implementation**: Complete type safety
-- **Modern React Patterns**: Hooks, Context, and performance optimization
-- **FastAPI Best Practices**: Async/await, dependency injection, validation
-- **Database Optimization**: Connection pooling, indexing, and query optimization
-- **API Design**: RESTful endpoints with comprehensive documentation
-- **Testing Strategy**: Unit and integration test structure
-- **Documentation**: Comprehensive setup and usage guides
----
+**BrandRanker** - Empowering intelligent brand analysis through AI
