@@ -94,9 +94,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             try {
               console.log('🧪 Testing token with API call...');
               // Use the same logic as the API service
-              let apiUrl = 'https://brand-ranker-backend.onrender.com'; // Default to production
+              let apiUrl = process.env.REACT_APP_API_URL || 'https://brand-ranker-backend.onrender.com';
               
-              if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+              // Only use localhost for development mode
+              if (process.env.NODE_ENV === 'development' && !process.env.REACT_APP_API_URL) {
                 apiUrl = 'http://localhost:8000';
               }
               

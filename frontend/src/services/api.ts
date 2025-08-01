@@ -1,55 +1,28 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { User, Token, ExperimentResult, ExperimentCreate, ExperimentResponse } from '../types';
 
-// Enhanced API URL detection for cross-device access
+// Simplified API URL detection for Firebase deployment
 const API_BASE_URL = (() => {
-  // Get the current hostname and protocol
-  const currentHostname = window.location.hostname;
-  const currentProtocol = window.location.protocol;
-  const currentPort = window.location.port;
-  
-  console.log('🔍 Current hostname:', currentHostname);
-  console.log('🔍 Current protocol:', currentProtocol);
-  console.log('🔍 Current port:', currentPort);
-  console.log('🔍 Full current URL:', window.location.href);
-  
-  // Production domains - always use production backend
-  const productionDomains = [
-    'brand-ranker-app.web.app',
-    'brand-ranker-app.firebaseapp.com',
-    'brandranker.vercel.app',
-    'brandranker.netlify.app'
-  ];
-  
-  // Check if we're on a production domain
-  if (productionDomains.includes(currentHostname)) {
-    console.log('🌐 Production domain detected, using production backend');
-    return 'https://brand-ranker-backend.onrender.com';
+  // Priority 1: Environment variable (for Firebase deployment)
+  if (process.env.REACT_APP_API_URL) {
+    console.log('🔧 Using environment variable for API URL:', process.env.REACT_APP_API_URL);
+    return process.env.REACT_APP_API_URL;
   }
   
-  // Development/local testing - ONLY for localhost
-  if (currentHostname === 'localhost' || currentHostname === '127.0.0.1') {
-    console.log('🏠 Local development detected');
-    
-    // Check if we're running on a specific port
-    if (currentPort === '3000' || currentPort === '3001') {
-      console.log('🔧 React dev server detected, using localhost backend');
-      return 'http://localhost:8000';
-    }
-    
-    // If no specific port or different port, try to detect backend
-    console.log('🔧 Using localhost backend for development');
+  // Priority 2: Check if we're in development mode
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🏠 Development mode detected, using localhost backend');
     return 'http://localhost:8000';
   }
   
-  // For ANY other domain, IP address, or external access - ALWAYS use production backend
-  console.log('🌐 External device detected, using production backend');
-  console.log('🔍 This ensures cross-device compatibility');
+  // Priority 3: Production fallback
+  console.log('🌐 Production mode detected, using production backend');
   return 'https://brand-ranker-backend.onrender.com';
 })();
 
 console.log('🔍 Final API Base URL:', API_BASE_URL);
 console.log('🔍 Environment:', process.env.NODE_ENV);
+console.log('🔍 REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
 console.log('🔍 Current hostname:', window.location.hostname);
 console.log('🔍 Current URL:', window.location.href);
 
@@ -76,7 +49,8 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 second timeout
+  timeout: 15000, // 15 second timeout for global access
+  withCredentials: false, // Disable credentials for global CORS
 });
 
 // Request interceptor to add auth token and cache key

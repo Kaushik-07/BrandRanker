@@ -18,7 +18,7 @@ load_dotenv()  # Load environment variables
 
 app = FastAPI()
 
-# Enhanced CORS Setup - Comprehensive configuration for all APIs
+# Enhanced CORS Setup - Global access configuration
 origins = [
     "http://localhost:3000",                    # React dev server
     "http://localhost:3001",                    # Alternative dev port
@@ -31,33 +31,22 @@ origins = [
     "https://brand-ranker-backend.onrender.com", # Backend URL (for testing)
     "https://brandranker.vercel.app",          # Vercel deployment
     "https://brandranker.netlify.app",         # Netlify deployment
-    "*",  # Allow all origins for development/testing
+    "https://brandranker-git-main-apoorv-verma.vercel.app", # Vercel preview
+    "https://brandranker-apoorv-verma.vercel.app", # Vercel custom domain
+    "https://brandranker.vercel.app",          # Vercel main
+    "https://brandranker.netlify.app",         # Netlify main
+    "https://brandranker-git-main-apoorv-verma.vercel.app", # Vercel branch
+    "https://brandranker-apoorv-verma.vercel.app", # Vercel custom
 ]
 
-# Get environment-specific origins
-if os.getenv("ENVIRONMENT") == "production":
-    # In production, be more restrictive
-    origins = [
-        "https://brand-ranker-app.web.app",
-        "https://brand-ranker-app.firebaseapp.com",
-        "https://brandranker.vercel.app",
-        "https://brandranker.netlify.app",
-    ]
-elif os.getenv("ENVIRONMENT") == "development":
-    # In development, allow localhost and common dev ports
-    origins = [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:8000",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:3001",
-        "http://127.0.0.1:8000",
-    ]
+# For global access, allow any origin that makes a request
+# This is more permissive but necessary for cross-device access
+origins.append("*")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,              # Allow cookies/auth headers
+    allow_credentials=False,              # Set to False when using "*" for global access
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allow_headers=[
         "Accept",
@@ -171,6 +160,14 @@ async def startup_event():
 async def handle_errors(request: Request, call_next):
     try:
         response = await call_next(request)
+        
+        # Add dynamic CORS headers for global access
+        origin = request.headers.get("Origin")
+        if origin:
+            response.headers["Access-Control-Allow-Origin"] = origin
+        else:
+            response.headers["Access-Control-Allow-Origin"] = "*"
+        
         return response
     except Exception as e:
         print(f"❌ Error handling request: {str(e)}")
@@ -182,18 +179,32 @@ async def handle_errors(request: Request, call_next):
 # CORS preflight handler for all endpoints
 @app.options("/{full_path:path}")
 async def options_handler(request: Request):
-    """Handle CORS preflight requests for all endpoints"""
-    return JSONResponse(
-        status_code=200,
-        content={"message": "CORS preflight successful"},
-        headers={
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
-            "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Max-Age": "86400",
-        }
-    )
+    """Handle CORS preflight requests for all endpoints with global access"""
+    origin = request.headers.get("Origin")
+    
+    # For global access, allow any origin
+    if origin:
+        return JSONResponse(
+            status_code=200,
+            content={"message": "CORS preflight successful"},
+            headers={
+                "Access-Control-Allow-Origin": origin,
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
+                "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
+                "Access-Control-Max-Age": "86400",
+            }
+        )
+    else:
+        return JSONResponse(
+            status_code=200,
+            content={"message": "CORS preflight successful"},
+            headers={
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
+                "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
+                "Access-Control-Max-Age": "86400",
+            }
+        )
 
 # Helper function to get user from token
 def get_user_from_token(request: Request, db: Session = Depends(get_db)):
