@@ -6,6 +6,7 @@ import os
 class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./brandranker.db"
+    DATABASE_PERSISTENT: bool = True
     
     # Security
     SECRET_KEY: str = "your-secret-key-change-this-in-production"
