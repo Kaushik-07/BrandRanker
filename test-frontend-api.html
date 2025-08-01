@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Brand Ranker API Test</h1>
+    <button onclick="testRegister()">Test Register</button>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testHealth()">Test Health</button>
+    <div id="results"></div>
+
+    <script>
+        const API_BASE_URL = 'https://brand-ranker-backend.onrender.com';
+        
+        function log(message) {
+            const results = document.getElementById('results');
+            results.innerHTML += '<p>' + message + '</p>';
+            console.log(message);
+        }
+
+        async function testRegister() {
+            log('Testing registration...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': 'https://brand-ranker-app.web.app'
+                    },
+                    body: JSON.stringify({
+                        email: 'test' + Date.now() + '@example.com',
+                        username: 'testuser' + Date.now(),
+                        password: 'testpass123'
+                    })
+                });
+                
+                log(`Status: ${response.status}`);
+                const data = await response.json();
+                log(`Response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
+        }
+
+        async function testLogin() {
+            log('Testing login...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': 'https://brand-ranker-app.web.app'
+                    },
+                    body: JSON.stringify({
+                        username: 'Apoorv123',
+                        password: 'Apoorv123'
+                    })
+                });
+                
+                log(`Status: ${response.status}`);
+                const data = await response.json();
+                log(`Response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
+        }
+
+        async function testHealth() {
+            log('Testing health endpoint...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Origin': 'https://brand-ranker-app.web.app'
+                    }
+                });
+                
+                log(`Status: ${response.status}`);
+                const data = await response.json();
+                log(`Response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html> 

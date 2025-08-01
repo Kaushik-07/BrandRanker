@@ -49,8 +49,8 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000, // 15 second timeout for global access
-  withCredentials: true, // Enable credentials for production CORS
+  timeout: 30000, // 30 second timeout for better reliability
+  withCredentials: false, // Disable credentials temporarily to test
 });
 
 // Request interceptor to add auth token and cache key

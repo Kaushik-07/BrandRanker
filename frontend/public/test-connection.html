@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Brand Ranker Connection Test</h1>
+    
+    <button onclick="testHealth()">Test Health Endpoint</button>
+    <button onclick="testRegister()">Test Registration</button>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testAll()">Test All</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_BASE_URL = 'https://brand-ranker-backend.onrender.com';
+        
+        function log(message, isError = false) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${isError ? 'error' : 'success'}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            results.appendChild(div);
+            console.log(message);
+        }
+
+        async function testHealth() {
+            log('Testing health endpoint...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Origin': 'https://brand-ranker-app.web.app'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Health test successful: ${data.status}`);
+                } else {
+                    log(`❌ Health test failed: ${response.status} ${response.statusText}`, true);
+                }
+            } catch (error) {
+                log(`❌ Health test error: ${error.message}`, true);
+            }
+        }
+
+        async function testRegister() {
+            log('Testing registration...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': 'https://brand-ranker-app.web.app'
+                    },
+                    body: JSON.stringify({
+                        email: 'test' + Date.now() + '@example.com',
+                        username: 'testuser' + Date.now(),
+                        password: 'testpass123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Registration test successful: User ${data.username} created`);
+                } else {
+                    const errorData = await response.json();
+                    log(`❌ Registration test failed: ${response.status} - ${errorData.detail}`, true);
+                }
+            } catch (error) {
+                log(`❌ Registration test error: ${error.message}`, true);
+            }
+        }
+
+        async function testLogin() {
+            log('Testing login...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Origin': 'https://brand-ranker-app.web.app'
+                    },
+                    body: JSON.stringify({
+                        username: 'Apoorv123',
+                        password: 'Apoorv123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Login test successful: Token received`);
+                } else {
+                    const errorData = await response.json();
+                    log(`❌ Login test failed: ${response.status} - ${errorData.detail}`, true);
+                }
+            } catch (error) {
+                log(`❌ Login test error: ${error.message}`, true);
+            }
+        }
+
+        async function testAll() {
+            log('Starting all tests...');
+            await testHealth();
+            await testRegister();
+            await testLogin();
+            log('All tests completed!');
+        }
+
+        // Auto-run health test on page load
+        window.onload = function() {
+            log('Page loaded, testing connection...');
+            testHealth();
+        };
+    </script>
+</body>
+</html> 

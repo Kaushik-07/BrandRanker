@@ -36,7 +36,7 @@ if settings.DEBUG:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,              # Enable credentials for production
+    allow_credentials=False,              # Disable credentials temporarily for testing
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allow_headers=[
         "Accept",
@@ -193,7 +193,7 @@ async def options_handler(request: Request):
             content={"message": "CORS preflight successful"},
             headers={
                 "Access-Control-Allow-Origin": origin,
-                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Credentials": "false",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
                 "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
                 "Access-Control-Max-Age": "86400",
@@ -206,7 +206,7 @@ async def options_handler(request: Request):
             content={"message": "CORS preflight successful"},
             headers={
                 "Access-Control-Allow-Origin": origin if origin else "*",
-                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Credentials": "false",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
                 "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
                 "Access-Control-Max-Age": "86400",
