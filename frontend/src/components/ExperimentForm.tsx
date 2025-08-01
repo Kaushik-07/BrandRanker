@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { experimentsAPI } from '../services/api';
+import './ExperimentForm.css';
 
 interface ExperimentFormProps {
   onExperimentCreated: () => void;
@@ -41,7 +42,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
   // Validate company with Perplexity API
   const validateCompanyWithAPI = async (companyName: string): Promise<boolean> => {
     try {
-      const response = await fetch('http://localhost:8000/api/validate/companies', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://brand-ranker-backend.onrender.com'}/api/validate/companies`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
   // Validate category with Perplexity API
   const validateCategoryWithAPI = async (categoryName: string): Promise<boolean> => {
     try {
-      const response = await fetch('http://localhost:8000/api/validate/categories', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://brand-ranker-backend.onrender.com'}/api/validate/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

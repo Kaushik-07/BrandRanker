@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, AuthContextType } from '../types';
 import { authAPI } from '../services/api';
 
@@ -59,6 +59,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Function to handle token expiration (removed unused function)
+
+  // Enhanced initialization effect with proper dependencies
   useEffect(() => {
     const initializeAuth = async () => {
       console.log('🔄 Initializing authentication state...');
@@ -87,10 +90,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.log('✅ Current user state after restoration:', userData);
             console.log('✅ Current token state after restoration:', storedToken ? 'Present' : 'Missing');
             
-            // Test the token with a simple API call
+            // Test the token with a simple API call (use dynamic API URL)
             try {
               console.log('🧪 Testing token with API call...');
-              const testResponse = await fetch('http://localhost:8000/api/experiments/', {
+              // Use the same logic as the API service
+              let apiUrl = 'https://brand-ranker-backend.onrender.com'; // Default to production
+              
+              if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                apiUrl = 'http://localhost:8000';
+              }
+              
+              const testResponse = await fetch(`${apiUrl}/api/experiments/`, {
                 headers: {
                   'Authorization': `Bearer ${storedToken}`,
                   'Content-Type': 'application/json'
@@ -127,12 +137,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setIsLoading(false);
       console.log('✅ Authentication initialization complete');
-      console.log('🔍 Final user state:', user);
-      console.log('🔍 Final token state:', token ? 'Present' : 'Missing');
     };
 
     initializeAuth();
-  }, []);
+  }, []); // Empty dependency array since this should only run once on mount
 
   const login = async (username: string, password: string) => {
     setIsLoading(true);
@@ -208,14 +216,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log('✅ Logout successful, data cleared');
   };
 
-  // Function to handle token expiration
-  const handleTokenExpiration = useCallback(() => {
-    console.log('🔄 Token expired, logging out user');
-    logout();
-  }, []);
-
-
-
   // Check token expiration periodically
   useEffect(() => {
     if (!token) return;
@@ -223,7 +223,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkTokenExpiration = () => {
       if (token && !validateToken(token)) {
         console.log('🔄 Token expired during periodic check, logging out user');
-        handleTokenExpiration();
+        logout();
       }
     };
 
@@ -231,7 +231,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const interval = setInterval(checkTokenExpiration, 10 * 60 * 1000);
     
     return () => clearInterval(interval);
-  }, [token, handleTokenExpiration]);
+  }, [token]); // Only depend on token, use logout directly
 
   const value: AuthContextType = {
     user,

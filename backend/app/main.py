@@ -12,20 +12,47 @@ from dotenv import load_dotenv
 from datetime import datetime
 from jose import JWTError, jwt
 from app.core.config import settings
+import os
 
 load_dotenv()  # Load environment variables
 
 app = FastAPI()
 
-# CORS Setup - Comprehensive configuration for all APIs
+# Enhanced CORS Setup - Comprehensive configuration for all APIs
 origins = [
     "http://localhost:3000",                    # React dev server
     "http://localhost:3001",                    # Alternative dev port
+    "http://localhost:8000",                    # Backend dev server
+    "http://127.0.0.1:3000",                   # Local development
+    "http://127.0.0.1:3001",                   # Alternative local dev
+    "http://127.0.0.1:8000",                   # Local backend
     "https://brand-ranker-app.web.app",        # Deployed frontend
     "https://brand-ranker-app.firebaseapp.com", # Firebase alternative URL
     "https://brand-ranker-backend.onrender.com", # Backend URL (for testing)
+    "https://brandranker.vercel.app",          # Vercel deployment
+    "https://brandranker.netlify.app",         # Netlify deployment
     "*",  # Allow all origins for development/testing
 ]
+
+# Get environment-specific origins
+if os.getenv("ENVIRONMENT") == "production":
+    # In production, be more restrictive
+    origins = [
+        "https://brand-ranker-app.web.app",
+        "https://brand-ranker-app.firebaseapp.com",
+        "https://brandranker.vercel.app",
+        "https://brandranker.netlify.app",
+    ]
+elif os.getenv("ENVIRONMENT") == "development":
+    # In development, allow localhost and common dev ports
+    origins = [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3001",
+        "http://127.0.0.1:8000",
+    ]
 
 app.add_middleware(
     CORSMiddleware,
@@ -47,6 +74,10 @@ app.add_middleware(
         "Expires",
         "X-CSRF-Token",
         "X-API-Key",
+        "X-Forwarded-For",
+        "X-Real-IP",
+        "X-Forwarded-Proto",
+        "X-Forwarded-Host",
     ],
     expose_headers=[
         "Content-Type",
@@ -59,6 +90,8 @@ app.add_middleware(
         "X-Current-Page",
         "X-Per-Page",
         "X-Total-Pages",
+        "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Credentials",
     ],
     max_age=86400,  # Cache preflight requests for 24 hours
 )
