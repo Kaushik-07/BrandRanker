@@ -18,35 +18,25 @@ load_dotenv()  # Load environment variables
 
 app = FastAPI()
 
-# Enhanced CORS Setup - Global access configuration
-origins = [
-    "http://localhost:3000",                    # React dev server
-    "http://localhost:3001",                    # Alternative dev port
-    "http://localhost:8000",                    # Backend dev server
-    "http://127.0.0.1:3000",                   # Local development
-    "http://127.0.0.1:3001",                   # Alternative local dev
-    "http://127.0.0.1:8000",                   # Local backend
-    "https://brand-ranker-app.web.app",        # Deployed frontend
-    "https://brand-ranker-app.firebaseapp.com", # Firebase alternative URL
-    "https://brand-ranker-backend.onrender.com", # Backend URL (for testing)
-    "https://brandranker.vercel.app",          # Vercel deployment
-    "https://brandranker.netlify.app",         # Netlify deployment
-    "https://brandranker-git-main-apoorv-verma.vercel.app", # Vercel preview
-    "https://brandranker-apoorv-verma.vercel.app", # Vercel custom domain
-    "https://brandranker.vercel.app",          # Vercel main
-    "https://brandranker.netlify.app",         # Netlify main
-    "https://brandranker-git-main-apoorv-verma.vercel.app", # Vercel branch
-    "https://brandranker-apoorv-verma.vercel.app", # Vercel custom
-]
+# Enhanced CORS Setup - Production-ready configuration
+# Parse CORS origins from environment variable
+cors_origins_str = settings.BACKEND_CORS_ORIGINS
+origins = [origin.strip() for origin in cors_origins_str.split(",") if origin.strip()]
 
-# For global access, allow any origin that makes a request
-# This is more permissive but necessary for cross-device access
-origins.append("*")
+# Add development origins for local development
+if settings.DEBUG:
+    origins.extend([
+        "http://localhost:3000", "http://localhost:3001", "http://localhost:8000",
+        "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:8000"
+    ])
+
+# Remove wildcard origin for production - it conflicts with credentials
+# origins.append("*")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=False,              # Set to False when using "*" for global access
+    allow_credentials=True,              # Enable credentials for production
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allow_headers=[
         "Accept",
@@ -90,6 +80,18 @@ app.include_router(auth.router, prefix="/api")
 
 # Include the experiments router
 app.include_router(experiments.router, prefix="/api")
+
+# Health check endpoint for debugging
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for debugging CORS and deployment"""
+    return {
+        "status": "healthy",
+        "message": "BrandRanker Backend is running",
+        "cors_origins": origins,
+        "debug_mode": settings.DEBUG,
+        "timestamp": datetime.now().isoformat()
+    }
 
 # Models with validation
 class RankingRequest(BaseModel):
@@ -179,27 +181,32 @@ async def handle_errors(request: Request, call_next):
 # CORS preflight handler for all endpoints
 @app.options("/{full_path:path}")
 async def options_handler(request: Request):
-    """Handle CORS preflight requests for all endpoints with global access"""
+    """Handle CORS preflight requests for all endpoints with proper credentials support"""
     origin = request.headers.get("Origin")
     
-    # For global access, allow any origin
-    if origin:
+    # Check if origin is in our allowed list
+    allowed_origins = origins  # Use the same origins list from above
+    
+    if origin and origin in allowed_origins:
         return JSONResponse(
             status_code=200,
             content={"message": "CORS preflight successful"},
             headers={
                 "Access-Control-Allow-Origin": origin,
+                "Access-Control-Allow-Credentials": "true",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
                 "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
                 "Access-Control-Max-Age": "86400",
             }
         )
     else:
+        # For development or unknown origins, be more permissive
         return JSONResponse(
             status_code=200,
             content={"message": "CORS preflight successful"},
             headers={
-                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Origin": origin if origin else "*",
+                "Access-Control-Allow-Credentials": "true",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH",
                 "Access-Control-Allow-Headers": "Accept, Accept-Language, Content-Language, Content-Type, Authorization, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires, X-CSRF-Token, X-API-Key",
                 "Access-Control-Max-Age": "86400",

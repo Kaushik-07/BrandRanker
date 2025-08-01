@@ -15,4 +15,8 @@ services:
       - key: DATABASE_URL
         value: sqlite:///./brand_ranker.db
       - key: API_V1_STR
-        value: /api 
+        value: /api
+      - key: BACKEND_CORS_ORIGINS
+        value: "https://brand-ranker-app.web.app,https://brand-ranker-app.firebaseapp.com,https://brandranker.vercel.app,https://brandranker.netlify.app,https://brandranker-git-main-apoorv-verma.vercel.app,https://brandranker-apoorv-verma.vercel.app"
+      - key: DEBUG
+        value: "false" 

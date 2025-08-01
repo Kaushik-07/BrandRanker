@@ -68,7 +68,8 @@ export const ExperimentForm: React.FC<ExperimentFormProps> = ({
   // Validate category with Perplexity API
   const validateCategoryWithAPI = async (categoryName: string): Promise<boolean> => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://brand-ranker-backend.onrender.com'}/api/validate/categories`, {
+      const baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://brand-ranker-backend.onrender.com'
+      const response = await fetch(`${baseURL}/api/validate/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
